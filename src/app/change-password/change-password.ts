@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-change-password',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './change-password.html',
-  styleUrl: './change-password.css'
+  styleUrls: ['./change-password.css']
 })
-export class ChangePassword {
-
-}
+export class ChangePassword {}

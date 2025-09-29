@@ -1,48 +1,47 @@
-document.addEventListener("DOMContentLoaded", () => {
-  // ===== Change Password Feature =====
-  const changePasswordBtn = document.getElementById("change-password-btn") as HTMLButtonElement | null;
-  if (changePasswordBtn) {
-    changePasswordBtn.addEventListener("click", () => {
-      alert("Redirecting to change password page...");
-      // window.location.href = "change-password.html";
-    });
-  }
+import { Component, AfterViewInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-  // ===== Change Profile Picture Feature =====
-  const changeProfilePicBtn = document.getElementById("change-profile-pic-btn") as HTMLButtonElement | null;
-  const uploadProfilePic = document.getElementById("upload-profile-pic") as HTMLInputElement | null;
-  const profilePicDiv = document.getElementById("profile-pic") as HTMLDivElement | null;
+@Component({
+  selector: 'app-staff-profile',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './staff-profile.html',
+  styleUrls: ['./staff-profile.css']
+})
+export class StaffProfile implements AfterViewInit {
+  ngAfterViewInit(): void {
+    const changePasswordBtn = document.getElementById('change-password-btn') as HTMLButtonElement | null;
+    if (changePasswordBtn) {
+      changePasswordBtn.addEventListener('click', () => {
+        alert('Redirecting to change password page...');
+      });
+    }
 
-  if (changeProfilePicBtn && uploadProfilePic && profilePicDiv) {
-    // Open file selector on button click
-    changeProfilePicBtn.addEventListener("click", () => {
-      uploadProfilePic.click();
-    });
+    const changeProfilePicBtn = document.getElementById('change-profile-pic-btn') as HTMLButtonElement | null;
+    const uploadProfilePic = document.getElementById('upload-profile-pic') as HTMLInputElement | null;
+    const profilePicDiv = document.getElementById('profile-pic') as HTMLDivElement | null;
 
-    // Preview selected image and save in localStorage
-    uploadProfilePic.addEventListener("change", (event: Event) => {
-      const target = event.target as HTMLInputElement;
-      const file = target.files ? target.files[0] : null;
+    if (changeProfilePicBtn && uploadProfilePic && profilePicDiv) {
+      changeProfilePicBtn.addEventListener('click', () => uploadProfilePic.click());
 
-      if (file && file.type.startsWith("image/")) {
-        const reader = new FileReader();
+      uploadProfilePic.addEventListener('change', (event: Event) => {
+        const target = event.target as HTMLInputElement;
+        const file = target.files ? target.files[0] : null;
+        if (file && file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = (e: ProgressEvent<FileReader>) => {
+            const result = e.target?.result as string;
+            profilePicDiv.style.backgroundImage = `url('${result}')`;
+            localStorage.setItem('profilePic', result);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
 
-        reader.onload = (e: ProgressEvent<FileReader>) => {
-          const result = e.target?.result as string;
-          profilePicDiv.style.backgroundImage = `url('${result}')`;
-
-          // Save to local storage (Temporary)
-          localStorage.setItem("profilePic", result);
-        };
-
-        reader.readAsDataURL(file);
+      const savedPic = localStorage.getItem('profilePic');
+      if (savedPic) {
+        profilePicDiv.style.backgroundImage = `url('${savedPic}')`;
       }
-    });
-
-    // Load saved profile picture from local storage on page load
-    const savedPic = localStorage.getItem("profilePic");
-    if (savedPic) {
-      profilePicDiv.style.backgroundImage = `url('${savedPic}')`;
     }
   }
-});
+}

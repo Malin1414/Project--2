@@ -64,7 +64,7 @@ ul li a:hover{
 body {
     min-height: 100vh;
     background: linear-gradient(to top, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.5) 50%),
-                url("usj_cover-1557335254.jpg");
+                url('/src/assets/usj_cover-1557335254.jpg');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -217,3 +217,4 @@ form button{
         padding: 8px 0;
     }
 }
+

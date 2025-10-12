@@ -1,47 +1,36 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-student-profile',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './student-profile.html',
   styleUrls: ['./student-profile.css']
 })
-export class StudentProfile implements AfterViewInit {
-  ngAfterViewInit(): void {
-    const changePasswordBtn = document.getElementById('change-password-btn') as HTMLButtonElement | null;
-    if (changePasswordBtn) {
-      changePasswordBtn.addEventListener('click', () => {
-        alert('Redirecting to change password page...');
-      });
-    }
+export class StudentProfile {
+  student = {
+    profilePic: 'assets/default-profile.png', // default profile image
+    name: 'John Doe',
+    department: 'Computer Science',
+    registrationNo: 'CS20231001',
+    email: 'john.doe@university.edu',
+    indexNo: '15001001',
+    status: 'Enrolled'
+  };
 
-    const changeProfilePicBtn = document.getElementById('change-profile-pic-btn') as HTMLButtonElement | null;
-    const uploadProfilePic = document.getElementById('upload-profile-pic') as HTMLInputElement | null;
-    const profilePicDiv = document.getElementById('profile-pic') as HTMLDivElement | null;
+  uploadProfilePic() {
+    const fileInput = document.getElementById('upload-profile-pic') as HTMLInputElement;
+    fileInput.click();
+  }
 
-    if (changeProfilePicBtn && uploadProfilePic && profilePicDiv) {
-      changeProfilePicBtn.addEventListener('click', () => uploadProfilePic.click());
-
-      uploadProfilePic.addEventListener('change', (event: Event) => {
-        const target = event.target as HTMLInputElement;
-        const file = target.files ? target.files[0] : null;
-        if (file && file.type.startsWith('image/')) {
-          const reader = new FileReader();
-          reader.onload = (e: ProgressEvent<FileReader>) => {
-            const result = e.target?.result as string;
-            profilePicDiv.style.backgroundImage = `url('${result}')`;
-            localStorage.setItem('profilePic', result);
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-
-      const savedPic = localStorage.getItem('profilePic');
-      if (savedPic) {
-        profilePicDiv.style.backgroundImage = `url('${savedPic}')`;
-      }
+  onProfilePicChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => this.student.profilePic = e.target.result;
+      reader.readAsDataURL(input.files[0]);
     }
   }
 }

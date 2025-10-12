@@ -10,5 +10,5 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./app.css']
 })
 export class App {
-  protected readonly title = signal('my Angular-app');
+  protected readonly title = signal('');
 }

@@ -1,47 +1,47 @@
 <div class="main">
-    <div class="navbar">
-      <div class="icon">
-        <h2 class="logo">Learning Management System</h2>
-      </div>
-      <div class="menu">
-        <ul>
-          <li><a href="login.html">HOME</a></li>
-          <li><a href="#footer">CONTACT US</a></li>
-        </ul>
-      </div>
+  <div class="navbar">
+    <div class="icon">
+      <h2 class="logo">Learning Management System</h2>
     </div>
-    <div class="container">
-        <div class="container-box">
-        <form action="staff_Info.php" method="post">
-            <h2>Registration</h2>
-
-            <input type="hidden" name="staffId" id="staffIdInput">
-
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
-                
-            <label for="password">New Password</label>
-            <input type="password" id="password" name="password" required>
-                
-            <label for="confirm">Confirm Password</label>
-            <input type="password" id="confirm" name="confirm" required>
-                
-            <button type="submit" class="btn">SUBMIT</button>
-        </form>
-        </div>
+    <div class="menu">
+      <ul>
+        <li><a routerLink="/login">HOME</a></li>
+        <li><a href="#footer">CONTACT US</a></li>
+      </ul>
     </div>
+  </div>
 
-    <!---Footer section--->
+  <div class="container">
+    <div class="container-box">
+      <h2>Registration</h2>
+      <form #staffForm="ngForm" (ngSubmit)="onSubmit()">
 
-    <footer id="footer">
-        <div class="footer-content">
-            <h3>Contact Us</h3>
-            <p>University of Sri Jayewardenepura, Gangodawila, Nugegoda</p>
-            <p>E-mail : <a href="mailto:info@sjp.ac.lk">info@sjp.ac.lk</a></p>
-        </div>
-    </footer>
+        <input type="hidden" name="staffId" [(ngModel)]="staffId" id="staffIdInput">
 
-    <script src="staff_Info.js"></script>
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" [(ngModel)]="name" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" [(ngModel)]="email" required>
+
+        <label for="password">New Password</label>
+        <input type="password" id="password" name="password" [(ngModel)]="password" required>
+
+        <label for="confirm">Confirm Password</label>
+        <input type="password" id="confirm" name="confirm" [(ngModel)]="confirmPassword" required>
+
+        <button type="submit" class="btn" [disabled]="staffForm.invalid">SUBMIT</button>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="footer-content">
+      <h3>Contact Us</h3>
+      <p>University of Sri Jayewardenepura, Gangodawila, Nugegoda</p>
+      <p>E-mail : <a href="mailto:info@sjp.ac.lk">info@sjp.ac.lk</a></p>
+    </div>
+  </footer>
+</div>

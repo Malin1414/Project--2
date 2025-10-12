@@ -1,11 +1,28 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
-export class Login {}
+export class Login {
+  username: string = '';
+  password: string = '';
+
+  constructor(private router: Router) {}
+
+  onLogin() {
+    if (this.username === 'student' && this.password === '123') {
+      this.router.navigate(['/student-home']);
+    } else if (this.username === 'staff' && this.password === '123') {
+      this.router.navigate(['/staff-home']);
+    } else {
+      alert('Invalid username or password');
+    }
+  }
+}

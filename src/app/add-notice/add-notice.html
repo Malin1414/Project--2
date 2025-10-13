@@ -33,24 +33,24 @@
                     <div class="selection">
                         <label>Department*</label>
                         <div class="checkbox-group">
-                            <label><input type="checkbox" name="department" value="Computer Science"> Computer Science</label>
-                            <label><input type="checkbox" name="department" value="Software Engineering"> Software Engineering</label>
-                            <label><input type="checkbox" name="department" value="Information System"> Information System</label>
+                            <label><input type="checkbox" name="department" value="Computer Science" (change)="toggleDepartment('Computer Science', $event)"> Computer Science</label>
+                            <label><input type="checkbox" name="department" value="Software Engineering" (change)="toggleDepartment('Software Engineering', $event)"> Software Engineering</label>
+                            <label><input type="checkbox" name="department" value="Information System" (change)="toggleDepartment('Information System', $event)"> Information System</label>
                         </div>
                     </div>
 
                     <div class="selection">
                         <label>Batch*</label>
                         <div class="checkbox-group">
-                            <label><input type="checkbox" name="batch" value="2021/22"> 2021/22</label>
-                            <label><input type="checkbox" name="batch" value="2022/23"> 2022/23</label>
-                            <label><input type="checkbox" name="batch" value="2023/24"> 2023/24</label>
+                            <label><input type="checkbox" name="batch" value="2021/22" (change)="toggleBatch('2021/22', $event)"> 2021/22</label>
+                            <label><input type="checkbox" name="batch" value="2022/23" (change)="toggleBatch('2022/23', $event)"> 2022/23</label>
+                            <label><input type="checkbox" name="batch" value="2023/24" (change)="toggleBatch('2023/24', $event)"> 2023/24</label>
                         </div>
                     </div>
             
                     <div class="file">
                         <label for="attachment">Attach File</label>
-                        <input type="file" id="attachment" name="attachment">
+                        <input type="file" id="attachment" name="attachment" (change)="onFileChange($event)">
                     </div>
             
                     <div class="form-actions">

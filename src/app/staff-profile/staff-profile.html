@@ -11,7 +11,7 @@
       <div class="profile-pic" id="profile-pic"></div>
 
       <!-- Hidden File Input & Button -->
-      <input type="file" id="upload-profile-pic" accept="image/*" style="display: none;">
+      <input type="file" id="upload-profile-pic" accept="image/*" style="display: none;" (change)="uploadProfilePic($event)">
       <button (click)="changeProfilePic()" class="action-btn">
         Change Profile Picture
       </button>

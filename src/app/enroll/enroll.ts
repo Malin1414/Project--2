@@ -1,3 +1,4 @@
+
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -14,7 +15,6 @@ export class Enroll {
   password: string = '';
 
   onEnroll() {
-    // Replace this with your actual enroll logic
     console.log('Enrolling:', this.username, this.password);
     alert(`User ${this.username} enrolled successfully!`);
   }

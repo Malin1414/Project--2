@@ -1,3 +1,4 @@
+
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -27,7 +28,7 @@ export class StaffHome {
 
   editNotice(notice: any) {
     console.log('Edit notice', notice);
-    // Add edit logic
+    
   }
 
   deleteNotice(notice: any) {

@@ -1,3 +1,4 @@
+
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -25,8 +26,7 @@ export class StaffHome implements OnInit {
       .subscribe(res => {
         if (res.success) this.notices = res.notices;
       });
-  }
-
+  
   deleteNotice(notice: any) {
     const payload = { noticeId: notice.noticeId };
     this.http.post<any>('http://127.0.0.1:8000/api/staff-notices/delete', payload)

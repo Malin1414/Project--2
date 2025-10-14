@@ -12,7 +12,7 @@ import { StaffInfo } from './staff-info/staff-info';
 import { StudentInfo } from './student-info/student-info';
 
 export const routes: Routes = [
-	{ path: '',  component: StudentProfile },
+	{ path: '',  component: Login },
 	{ path: 'login', component: Login },
 	{ path: 'student-home', component: StudentHome },
 	{ path: 'staff-home', component: StaffHome },

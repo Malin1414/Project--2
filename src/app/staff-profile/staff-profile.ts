@@ -1,20 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-staff-profile',
   standalone: true,
-  imports: [RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './staff-profile.html',
   styleUrls: ['./staff-profile.css']
 })
 export class StaffProfile implements OnInit {
   staff = {
-    name: '',
-    email: '',
-    id: '',
-    status: '',
+    name: 'Dr. Jane Smith',
+    email: 'jane.smith@university.edu',
+    id: 'fc122252',
+    status: 'Enrolled',
     profile_picture: ''
   };
 

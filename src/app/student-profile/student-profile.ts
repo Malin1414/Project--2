@@ -11,15 +11,16 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './student-profile.html',
   styleUrls: ['./student-profile.css']
 })
+
 export class StudentProfile {
   student: any = {
     profilePic: 'assets/default-profile.png',
-    name: '',
-    department: '',
-    registrationNo: '',
-    email: '',
-    indexNo: '',
-    status: ''
+    name: 'John Doe',
+    department: 'Computer Science',
+    registrationNo: 'CS20231001',
+    email: 'john.doe@university.edu',
+    indexNo: '15001001',
+    status: 'Enrolled'
   };
 
   selectedFile: File | null = null;

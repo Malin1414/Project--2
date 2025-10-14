@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-staff-info',
   standalone: true,
-  imports: [FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './staff-info.html',
   styleUrls: ['./staff-info.css']
 })
+
 export class StaffInfo implements OnInit {
   staffId = '';
   name = '';

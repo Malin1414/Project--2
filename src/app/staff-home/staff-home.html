@@ -30,6 +30,61 @@
   </div>
 </div>
 
+<!-- Edit Modal -->
+<div *ngIf="showEditModal" class="modal" (click)="closeEditModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <span class="close" (click)="closeEditModal()">&times;</span>
+    <h2>Edit Notice</h2>
+    <form (submit)="updateNotice(); $event.preventDefault()">
+      
+      <div class="form-group">
+        <label for="editTitle">Title:</label>
+        <input type="text" id="editTitle" [(ngModel)]="editingNotice.title" name="title" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="editDescription">Description:</label>
+        <textarea id="editDescription" [(ngModel)]="editingNotice.description" name="description" required></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>Departments:</label>
+        <div class="checkbox-group">
+          <div *ngFor="let dept of departments">
+            <label>
+              <input type="checkbox" [value]="dept.id" [(ngModel)]="dept.selected" [name]="'dept_' + dept.id">
+              {{ dept.name }}
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Batches:</label>
+        <div class="checkbox-group">
+          <div *ngFor="let batch of batches">
+            <label>
+              <input type="checkbox" [value]="batch.id" [(ngModel)]="batch.selected" [name]="'batch_' + batch.id">
+              {{ batch.name }}
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="editAttachment">New Attachment (optional):</label>
+        <input type="file" id="editAttachment" name="attachment">
+        <small style="color: #666;">Leave empty to keep current attachment</small>
+      </div>
+      
+      <div class="form-buttons">
+        <button type="submit">Update Notice</button>
+        <button type="button" (click)="closeEditModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- FOOTER SECTION -->
 <footer id="footer">
   <div class="footer-content">

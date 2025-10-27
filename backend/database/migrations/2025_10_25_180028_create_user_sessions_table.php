@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('user_sessions', function (Blueprint $table) {
             $table->id();
             $table->string('user_id');
-            $table->enum('user_type', ['staff', 'student']);
-            $table->string('token', 64)->unique();
-            $table->timestamp('created_at');
-            $table->timestamp('expires_at');
+            $table->string('user_type');
+            $table->string('token', 255);
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('expires_at')->nullable();
             
-            $table->index(['token', 'expires_at']);
+            $table->index('token');
+            $table->index(['user_id', 'user_type']);
         });
     }
 

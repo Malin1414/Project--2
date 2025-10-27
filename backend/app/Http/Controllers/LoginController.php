@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
-    /**
-     * Handle user login
-     */
+    /* Handle user login */
     public function login(Request $request)
     {
         // Validate input
@@ -23,9 +21,8 @@ class LoginController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
+                'message' => 'Please fill in all fields'
+            ], 200);
         }
 
         $username = $request->username;
@@ -41,9 +38,8 @@ class LoginController extends Controller
             if ($staff->status === 'Not Enrolled') {
                 return response()->json([
                     'success' => false,
-                    'message' => 'You have not enrolled yet.',
-                    'redirect' => '/enroll'
-                ], 403);
+                    'message' => 'You are not enrolled yet. Please enroll first.'
+                ], 200);
             }
 
             // Verify password
@@ -63,7 +59,7 @@ class LoginController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Incorrect password'
-                ], 401);
+                ], 200);
             }
         }
 
@@ -77,9 +73,8 @@ class LoginController extends Controller
             if ($student->status === 'Not Enrolled') {
                 return response()->json([
                     'success' => false,
-                    'message' => 'You have not enrolled yet.',
-                    'redirect' => '/enroll'
-                ], 403);
+                    'message' => 'You have not enrolled yet. Please enroll first.',
+                ], 200);
             }
 
             // Verify password
@@ -99,15 +94,15 @@ class LoginController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Incorrect password'
-                ], 401);
+                ], 200);
             }
         }
 
         // User not found in either table
         return response()->json([
             'success' => false,
-            'message' => 'User not found'
-        ], 404);
+            'message' => 'Your username is incorrect'
+        ], 200);
     }
 
     /**
@@ -117,7 +112,7 @@ class LoginController extends Controller
     {
         $token = bin2hex(random_bytes(32));
         
-        // Store token in sessions table or use Laravel Sanctum
+        // Store token in sessions table 
         DB::table('user_sessions')->insert([
             'user_id' => $userId,
             'user_type' => $userType,
@@ -129,9 +124,7 @@ class LoginController extends Controller
         return $token;
     }
 
-    /**
-     * Handle user logout
-     */
+    /* Handle user logout*/
     public function logout(Request $request)
     {
         $token = $request->bearerToken();
@@ -148,9 +141,7 @@ class LoginController extends Controller
         ], 200);
     }
 
-    /**
-     * Verify token and get user info
-     */
+    /* Verify token and get user info */
     public function verifyToken(Request $request)
     {
         $token = $request->bearerToken();

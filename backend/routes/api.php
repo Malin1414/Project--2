@@ -55,12 +55,15 @@ Route::post('/staff-notices/delete', [StaffHomeController::class, 'deleteNotice'
 
 use App\Http\Controllers\StudentHomeController;
 
-Route::get('/student-profile', [StudentHomeController::class, 'getProfile']);
-Route::post('/student-profile/update-picture', [StudentHomeController::class, 'updateProfilePicture']);
+Route::middleware(['token.auth'])->group(function () {
+    Route::get('/student/home/profile', [StudentHomeController::class, 'getProfile']);
+    Route::post('/student/home/profile/picture', [StudentHomeController::class, 'updateProfilePicture']);
+});
 
 use App\Http\Controllers\StudentProfileController;
 
-Route::middleware('web')->group(function () {
+Route::middleware(['token.auth'])->group(function() {
     Route::get('/student/profile', [StudentProfileController::class, 'getProfile']);
     Route::post('/student/profile/picture', [StudentProfileController::class, 'updateProfilePicture']);
 });
+

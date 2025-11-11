@@ -57,4 +57,12 @@ export class AddNotice {
     if (event.target.checked) this.batches.push(batch);
     else this.batches = this.batches.filter(b => b !== batch);
   }
+
+  scrollToFooter() {
+  const footer = document.getElementById('footer');
+  if (footer) {
+    footer.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
 }

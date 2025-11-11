@@ -51,5 +51,15 @@ export class Login {
           alert('Login failed. Please try again.');
         }
       });
-  }
+    }
+
+      scrollToFooter() {
+        const footer = document.getElementById('footer');
+        if (footer) {
+          footer.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+
 }
+
+

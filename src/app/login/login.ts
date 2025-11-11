@@ -35,9 +35,9 @@ export class Login {
         next: (res) => {
           if (res.success) {
             // Login successful
-            sessionStorage.setItem('token', res.token);
-            sessionStorage.setItem('user_id', res.user_id);
-            sessionStorage.setItem('user_type', res.user_type);
+            localStorage.setItem('token', res.token);
+            localStorage.setItem('user_id', res.user_id);
+            localStorage.setItem('user_type', res.user_type);
             
             alert(res.message);
             this.router.navigate([res.redirect]);
@@ -51,5 +51,15 @@ export class Login {
           alert('Login failed. Please try again.');
         }
       });
-  }
+    }
+
+      scrollToFooter() {
+        const footer = document.getElementById('footer');
+        if (footer) {
+          footer.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+
 }
+
+

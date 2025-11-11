@@ -9,7 +9,7 @@
       <ul>
         <!-- Use routerLink instead of href -->
         <li><a routerLink="/login">HOME</a></li>
-        <li><a href="#footer">CONTACT US</a></li>
+        <li><a (click)="scrollToFooter()">CONTACT US</a></li>
       </ul>
     </div>
   </div>
@@ -24,7 +24,6 @@
     <div class="form">
       <h2>Login Here</h2>
 
-      <!-- Do NOT use action="login.php" (PHP not used in Angular) -->
       <form (ngSubmit)="onLogin()">
         <input
           type="text"

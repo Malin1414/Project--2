@@ -4,22 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 
 class StudentHomeController extends Controller
 {
     public function getProfile(Request $request)
     {
-        $studentId = $request->session()->get('studentId');
-        $loggedIn = $request->session()->get('logged_in');
-
-        if (!$loggedIn || !$studentId) {
+        if (!$request->user_id || $request->user_type !== 'student') {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized access. Please login first.'
-            ], 403);
+            ], 401);
         }
+
+        $studentId = $request->user_id;
 
         $student = DB::table('students as s')
             ->leftJoin('departments as d', 's.departmentId', '=', 'd.departmentId')
@@ -43,7 +40,6 @@ class StudentHomeController extends Controller
             ]);
         }
 
-        // Ensure all fields exist even if NULL
         $student = (array) $student;
         $student = array_merge([
             'studentId' => '',
@@ -60,6 +56,7 @@ class StudentHomeController extends Controller
             'student' => $student
         ]);
     }
+
 
     public function updateProfilePicture(Request $request)
     {

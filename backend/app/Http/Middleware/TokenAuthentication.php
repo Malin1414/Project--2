@@ -5,13 +5,11 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\Response;
 
 class TokenAuthentication
 {
-    /**
-     * Handle an incoming request.
-     */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         $token = $request->bearerToken();
 
@@ -31,7 +29,7 @@ class TokenAuthentication
         if (!$session) {
             return response()->json([
                 'success' => false,
-                'message' => 'Unauthorized - Invalid or expired token'
+                'message' => 'Invalid or expired token'
             ], 401);
         }
 

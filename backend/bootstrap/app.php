@@ -12,7 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-            
+        // Register the token.auth middleware alias
+        $middleware->alias([
+            'token.auth' => \App\Http\Middleware\TokenAuthentication::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

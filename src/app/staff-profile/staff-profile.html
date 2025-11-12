@@ -8,13 +8,15 @@
   <div class="profile-container">
     <header class="profile-header">
       <h1>Staff Profile</h1>
-      <div class="profile-pic" id="profile-pic"></div>
+      <div class="profile-pic" 
+          [style.backgroundImage]="'url(' + staff.profilePic + ')'"
+          [style.background-size]="'cover'"
+          [style.background-position]="'center'">
+      </div>
 
       <!-- Hidden File Input & Button -->
-      <input type="file" id="upload-profile-pic" accept="image/*" style="display: none;" (change)="uploadProfilePic($event)">
-      <button (click)="changeProfilePic()" class="action-btn">
-        Change Profile Picture
-      </button>
+      <input type="file" id="upload-profile-pic" accept="image/*" (change)="onProfilePicChange($event)" hidden>
+      <button class="action-btn" (click)="uploadProfilePic()">Change Profile Picture</button>
     </header>
 
     <main class="profile-details">
@@ -35,9 +37,7 @@
         <span class="detail-value">{{ staff.status }}</span>
       </div>
 
-      <button class="action-btn" routerLink="/change-password">
-        Change Password
-      </button>
+      <button class="action-btn" [routerLink]="'/change-password'">Change Password</button>
     </main>
   </div>
 </div>

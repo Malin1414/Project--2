@@ -11,63 +11,90 @@ class StaffProfileController extends Controller
     // Fetch staff profile
     public function getProfile(Request $request)
     {
-        $staffId = $request->session()->get('staffId');
-
-        if (!$staffId) {
-            return response()->json(['error' => 'Not logged in'], 403);
+        if (!$request->user_id || $request->user_type !== 'staff') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 401);
         }
 
-        $staff = DB::table('staff')->where('staffId', $staffId)->first();
+        $staffId = $request->user_id;
 
-        if (!$staff) {
-            return response()->json(['error' => 'Staff profile not found'], 404);
+        $staff = DB::table('staff')
+            ->where('staffId', $staffId)
+            ->select('staffId as id', 'name', 'email', 'status', 'profile_picture')
+            ->first();
+
+        if ($staff) {
+            return response()->json([
+                'success' => true,
+                'staff' => $staff
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Staff profile not found'
+            ]);
         }
-
-        return response()->json([
-            'staff' => [
-                'id' => $staff->staffId,
-                'name' => $staff->name,
-                'email' => $staff->email,
-                'status' => $staff->status,
-                'profile_picture' => $staff->profile_picture ?? null
-            ]
-        ]);
     }
 
     // Update profile picture
     public function updateProfilePicture(Request $request)
     {
-        $staffId = $request->session()->get('staffId');
-
-        if (!$staffId) {
-            return response()->json(['error' => 'Not logged in'], 403);
+        if (!$request->user_id || $request->user_type !== 'staff') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 401);
         }
 
+        $staffId = $request->user_id;
+
         if (!$request->hasFile('profile_picture')) {
-            return response()->json(['error' => 'No file uploaded'], 400);
+            return response()->json([
+                'success' => false,
+                'message' => 'No file uploaded'
+            ]);
         }
 
         $file = $request->file('profile_picture');
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-        if (!in_array($file->getMimeType(), $allowedTypes)) {
-            return response()->json(['error' => 'Invalid file type'], 400);
+        
+        $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+
+        if (!in_array($file->getClientMimeType(), $allowedTypes)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid file type. Only JPG, PNG, and GIF allowed.'
+            ]);
         }
 
         if ($file->getSize() > 2 * 1024 * 1024) {
-            return response()->json(['error' => 'File too large'], 400);
+            return response()->json([
+                'success' => false,
+                'message' => 'File size too large. Maximum 2MB allowed.'
+            ]);
         }
 
-        $fileName = $staffId . '_' . time() . '.' . $file->getClientOriginalExtension();
-        $path = $file->storeAs('public/profiles', $fileName);
+        // Delete old profile picture
+        $oldPicture = DB::table('staff')
+            ->where('staffId', $staffId)
+            ->value('profile_picture');
 
-        DB::table('staff')->where('staffId', $staffId)->update([
-            'profile_picture' => $path
-        ]);
+        if ($oldPicture && Storage::disk('public')->exists(str_replace('/storage/', '', $oldPicture))) {
+            Storage::disk('public')->delete(str_replace('/storage/', '', $oldPicture));
+        }
+
+        // Save new profile picture
+        $fileName = $staffId . '_' . time() . '.' . $file->getClientOriginalExtension();
+        $filePath = $file->storeAs('uploads/profiles', $fileName, 'public');
+        $profilePictureUrl = url('/storage/' . $filePath);
+
+        DB::table('staff')->where('staffId', $staffId)->update(['profile_picture' => $profilePictureUrl]);
 
         return response()->json([
             'success' => true,
             'message' => 'Profile picture updated successfully',
-            'profile_picture' => $path
+            'profile_picture' => $profilePictureUrl
         ]);
     }
 }

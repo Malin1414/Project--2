@@ -1,7 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
@@ -35,27 +35,36 @@ export class StaffHome implements OnInit {
     { date: '15-Jul-2025', text: 'Notice 12' }
   ];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit() {
     this.loadNotices();
   }
 
   loadNotices() {
-    this.http.post<any>('http://localhost:8000/api/notices/get', {})
-      .subscribe({
-        next: (response) => {
-          if (response.success && response.notices && response.notices.length > 0) {
-           this.notices = response.notices;
-          } else {
-            this.notices = this.defaultNotices;
-          }
-        },
-        error: (err) => {
-          console.error('Error loading notices:', err);
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('No token found. Please login.');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.http.get<any>('http://127.0.0.1:8000/api/staff/home/notices', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    }).subscribe({
+      next: (res) => {
+        if (res.success && res.notices && res.notices.length > 0) {
+          this.notices = res.notices;
+        } else {
+          console.warn('No notices found. Using default.');
           this.notices = this.defaultNotices;
         }
-      });
+      },
+      error: (err) => {
+        console.error('Error loading notices:', err);
+        this.notices = this.defaultNotices;
+      }
+    });
   }
   
   editNotice(notice: any) {
@@ -65,31 +74,64 @@ export class StaffHome implements OnInit {
   }
 
   loadDepartmentsAndBatches() {
-    this.http.post<any>('http://localhost:8000/api/departments-batches', {})
-      .subscribe(response => {
-        if (response.success) {
-          this.departments = response.departments;
-          this.batches = response.batches;
-        }
-      });
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    this.http.get<any>('http://127.0.0.1:8000/api/departments-batches', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    }).subscribe(response => {
+      if (response.success) {
+        this.departments = response.departments;
+        this.batches = response.batches;
+      }
+    });
   }
 
   updateNotice() {
-    this.http.post<any>('http://localhost:8000/api/notices/update', this.editingNotice)
-      .subscribe(response => {
-        if (response.success) {
-          this.loadNotices();
-          this.closeEditModal();
-        }
-      });
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    this.http.post<any>('http://127.0.0.1:8000/api/staff/home/notice/update', this.editingNotice, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    }).subscribe(response => {
+      if (response.success) {
+        alert('Notice updated successfully');
+        this.loadNotices();
+        this.closeEditModal();
+      } else {
+        alert(response.message);
+      }
+    });
   }
 
   deleteNotice(notice: any) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('No token found. Please login.');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    if (!confirm('Are you sure you want to delete this notice?')) return;
+
     const payload = { noticeId: notice.noticeId };
-    this.http.post<any>('http://127.0.0.1:8000/api/staff-notices/delete', payload)
-      .subscribe(res => {
-        if (res.success) this.notices = this.notices.filter(n => n !== notice);
-      });
+
+    this.http.post<any>('http://127.0.0.1:8000/api/staff/home/notice/delete', payload, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    }).subscribe(
+      res => {
+        if (res.success) {
+          alert('Notice deleted successfully');
+          this.notices = this.notices.filter(n => n !== notice);
+        } else {
+          alert(res.message);
+        }
+      },
+      err => {
+        console.error('Delete failed:', err);
+        alert('Failed to delete notice');
+      }
+    );
   }
 
   closeEditModal() {

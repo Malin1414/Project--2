@@ -35,11 +35,6 @@ use App\Http\Controllers\StaffRegistrationController;
 
 Route::post('/staff-register', [StaffRegistrationController::class, 'register']);
 
-use App\Http\Controllers\StaffProfileController;
-
-Route::get('/staff-profile', [StaffProfileController::class, 'getProfile']);
-Route::post('/staff-profile-picture', [StaffProfileController::class, 'updateProfilePicture']);
-
 use App\Http\Controllers\NoticeController;
 
 Route::post('/notices', [NoticeController::class, 'store']);
@@ -50,8 +45,19 @@ Route::post('/change-password', [ChangePasswordController::class, 'update']);
 
 use App\Http\Controllers\StaffHomeController;
 
-Route::get('/staff-notices', [StaffHomeController::class, 'getNotices']);
-Route::post('/staff-notices/delete', [StaffHomeController::class, 'deleteNotice']);
+Route::middleware('token.auth')->group(function () {
+    Route::get('/staff/home/notices', [StaffHomeController::class, 'getNotices']);
+    Route::post('/staff/home/notice/delete', [StaffHomeController::class, 'deleteNotice']);
+    Route::post('/staff/home/notice/update', [StaffHomeController::class, 'updateNotice']);
+});
+
+use App\Http\Controllers\StaffProfileController;
+
+Route::middleware('token.auth')->group(function () {
+    Route::get('/staff/profile', [StaffProfileController::class, 'getProfile']);
+    Route::post('/staff/profile/picture', [StaffProfileController::class, 'updateProfilePicture']);
+});
+
 
 use App\Http\Controllers\StudentHomeController;
 
